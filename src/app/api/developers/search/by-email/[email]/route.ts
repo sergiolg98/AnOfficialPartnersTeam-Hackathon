@@ -13,7 +13,7 @@ export async function GET(
     },
   });
 
-  const descriptions = records.map((item) => JSON.parse(item.short_description))[0];
+  const descriptions = records.map((item) => JSON.parse(item.short_description));
   const response = {
     email: email,
     short_descriptions: descriptions,
