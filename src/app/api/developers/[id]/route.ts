@@ -6,3 +6,4 @@ export async function GET(
     const slug = (await params).id // 'a', 'b', or 'c'
     return Response.json({message: slug});
   }
+  
