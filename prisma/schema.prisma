@@ -2,121 +2,124 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 model MeetingNote {
-  id                   Int    @id @default(autoincrement())
-  title                String
-  participants_email   String
-  participants_name    String
-  recording_end_time   String
-  recording_start_time String
-  recording_summary    String
+    id                   Int    @id @default(autoincrement())
+    title                String
+    transcript_encoded   String
+    transcript_vtt       String
+    participants_email   String
+    participants_name    String
+    recording_end_time   String
+    recording_start_time String
+    recording_summary    String
+    recording_id         String
+    recording_url        String
 }
 
 model DeveloperExperienceBasedDaily {
-  id                Int    @id @default(autoincrement())
-  name              String
-  short_description String
+    id                Int    @id @default(autoincrement())
+    name              String
+    short_description String
 }
 
 model Developer {
-  id              Int                       @id @default(autoincrement())
-  email           String                    @unique
-  name            String
-  lastname        String
-  seniority       Level
-  languageSkills  Level
-  position        String
-  softSkills      DeveloperSoftSkill[]
-  technicalSkills DeveloperTechnicalSkill[]
-  availability    Int
+    id              Int                       @id @default(autoincrement())
+    email           String                    @unique
+    name            String
+    lastname        String
+    seniority       Level
+    languageSkills  Level
+    position        String
+    softSkills      DeveloperSoftSkill[]
+    technicalSkills DeveloperTechnicalSkill[]
+    availability    Int
 }
 
 model SoftSkill {
-  id         Int                  @id @default(autoincrement())
-  name       String
-  rangeLevel Int
-  developers DeveloperSoftSkill[]
+    id         Int                  @id @default(autoincrement())
+    name       String
+    rangeLevel Int
+    developers DeveloperSoftSkill[]
 }
 
 model DeveloperSoftSkill {
-  developerId Int
-  softSkillId Int
-  level       Int
-  developer   Developer @relation(fields: [developerId], references: [id])
-  softSkill   SoftSkill @relation(fields: [softSkillId], references: [id])
+    developerId Int
+    softSkillId Int
+    level       Int
+    developer   Developer @relation(fields: [developerId], references: [id])
+    softSkill   SoftSkill @relation(fields: [softSkillId], references: [id])
 
-  @@id([developerId, softSkillId])
+    @@id([developerId, softSkillId])
 }
 
 model TechnicalSkill {
-  id         Int                       @id @default(autoincrement())
-  name       String
-  developers DeveloperTechnicalSkill[] // Relación muchos a muchos con Developer
-  projects   ProjectTechnicalSkill[] // Relación muchos a muchos con Project
+    id         Int                       @id @default(autoincrement())
+    name       String
+    developers DeveloperTechnicalSkill[] // Relación muchos a muchos con Developer
+    projects   ProjectTechnicalSkill[] // Relación muchos a muchos con Project
 }
 
 model ProjectTechnicalSkill {
-  id               Int @id @default(autoincrement())
-  projectId        Int
-  technicalSkillId Int
+    id               Int @id @default(autoincrement())
+    projectId        Int
+    technicalSkillId Int
 
-  project        Project        @relation(fields: [projectId], references: [id])
-  technicalSkill TechnicalSkill @relation(fields: [technicalSkillId], references: [id])
+    project        Project        @relation(fields: [projectId], references: [id])
+    technicalSkill TechnicalSkill @relation(fields: [technicalSkillId], references: [id])
 
-  @@unique([projectId, technicalSkillId]) // Evita duplicados en la relación
+    @@unique([projectId, technicalSkillId]) // Evita duplicados en la relación
 }
 
 model DeveloperTechnicalSkill {
-  developerId      Int
-  technicalSkillId Int
-  level            Level
-  developer        Developer      @relation(fields: [developerId], references: [id])
-  technicalSkill   TechnicalSkill @relation(fields: [technicalSkillId], references: [id])
+    developerId      Int
+    technicalSkillId Int
+    level            Level
+    developer        Developer      @relation(fields: [developerId], references: [id])
+    technicalSkill   TechnicalSkill @relation(fields: [technicalSkillId], references: [id])
 
-  @@id([developerId, technicalSkillId])
+    @@id([developerId, technicalSkillId])
 }
 
 enum Level {
-  BEGINNER
-  INTERMEDIATE
-  ADVANCED
+    BEGINNER
+    INTERMEDIATE
+    ADVANCED
 }
 
 model Client {
-  id       Int       @id @default(autoincrement())
-  name     String
-  projects Project[]
+    id       Int       @id @default(autoincrement())
+    name     String
+    projects Project[]
 }
 
 model Project {
-  id                 Int                     @id @default(autoincrement())
-  name               String
-  projectDescription String
-  techStack          ProjectTechnicalSkill[] // Relación muchos a muchos con TechnicalSkill
-  position           Position?               @relation(fields: [positionId], references: [id])
-  positionId         Int?
-  client             Client?                 @relation(fields: [clientId], references: [id])
-  clientId           Int?
-  status             Status
+    id                 Int                     @id @default(autoincrement())
+    name               String
+    projectDescription String
+    techStack          ProjectTechnicalSkill[] // Relación muchos a muchos con TechnicalSkill
+    position           Position?               @relation(fields: [positionId], references: [id])
+    positionId         Int?
+    client             Client?                 @relation(fields: [clientId], references: [id])
+    clientId           Int?
+    status             Status
 }
 
 model Position {
-  id      Int       @id @default(autoincrement())
-  name    String
-  Project Project[]
+    id      Int       @id @default(autoincrement())
+    name    String
+    Project Project[]
 }
 
-
 enum Status {
-  ACTIVE
-  PENDING
-  INACTIVE
+    ACTIVE
+    PENDING
+    INACTIVE
 }
