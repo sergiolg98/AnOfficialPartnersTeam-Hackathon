@@ -105,10 +105,18 @@ model Project {
   positionId         Int?
   client             Client?                 @relation(fields: [clientId], references: [id])
   clientId           Int?
+  status             Status
 }
 
 model Position {
   id      Int       @id @default(autoincrement())
   name    String
   Project Project[]
+}
+
+
+enum Status {
+  ACTIVE
+  PENDING
+  INACTIVE
 }
