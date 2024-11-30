@@ -1,8 +1,9 @@
+import Link from "next/link";
 import ClientList from "~/components/organisms/client-list";
 
 export default function Page() {
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen">
       {/* Hero Background with Gradient Overlay */}
       <div className="relative overflow-hidden bg-black/5 py-24">
         <div className="bg-grid-white/10 absolute inset-0" />
@@ -72,9 +73,7 @@ export default function Page() {
                 AI-powered matches based on real-time experience tracking
               </p>
             </div>
-            <button className="inline-flex h-11 items-center justify-center rounded-lg bg-primary px-6 py-2 text-sm font-medium text-primary-foreground shadow-lg transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
-              Add New Profile
-            </button>
+            <Link href="/new-client">Add New Profile</Link>
           </div>
 
           {/* Main Content Card */}

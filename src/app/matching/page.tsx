@@ -20,7 +20,7 @@ export default function Page() {
   };
 
   return (
-    <main className="dark flex min-h-screen items-center justify-center bg-background p-8">
+    <main className="flex min-h-screen items-center justify-center bg-background p-8">
       {/* Wrapper for Form and Developer List */}
       <div className="flex w-full max-w-4xl items-center justify-between gap-8">
         {/* Left Column: Payment Form */}
