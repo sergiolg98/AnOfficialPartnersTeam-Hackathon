@@ -15,7 +15,7 @@ export interface Project {
 }
 
 // utils/api.ts
-export async function getProject(id: string): Promise<Project> {
+export async function getProject(id: string) {
   const response = await fetch(`/api/projects/${id}`);
   
   if (!response.ok) {

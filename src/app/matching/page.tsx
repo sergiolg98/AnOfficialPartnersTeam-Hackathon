@@ -80,13 +80,15 @@ function PageContent() {
   const searchParams = useSearchParams();
   const projectId = searchParams.get("id");
   const { data } = api.projects.getById.useQuery({ id: Number(projectId) });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [response, setResponse] = useState<any>({});
 
   const fetchProjectData = async (id: string) => {
     try {
       const project = await getProject(id);
-      console.log(project);
+      return project;
     } catch (error) {
-      console.error("Error:", error);
+      return null;
     }
   };
 
@@ -155,7 +157,9 @@ function PageContent() {
               <Button
                 className="w-full"
                 onClick={async () => {
-                  // await fetchProjectData();
+                  const response = await fetchProjectData(projectId ?? "");
+                  setResponse(response);
+                  console.log(response, "con fe");
                   setShowSuggestions(true);
                 }}
               >
