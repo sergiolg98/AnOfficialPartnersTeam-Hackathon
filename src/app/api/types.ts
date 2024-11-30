@@ -10,3 +10,10 @@ export type MeetingNote = {
   recording_id: string,
   recording_url: string,
 };
+
+export type TranscriptEntry = {
+  start: number,
+  text: string,
+  end: number,
+  speaker: string,
+}
