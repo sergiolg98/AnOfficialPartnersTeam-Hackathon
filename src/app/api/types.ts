@@ -1,7 +1,7 @@
 export type MeetingNote = {
   title: string,
   transcript_encoded: string,
-  transcript_vtt?: string,
+  transcript_vtt: string,
   participants_email: string,
   participants_name: string,
   recording_end_time: string,

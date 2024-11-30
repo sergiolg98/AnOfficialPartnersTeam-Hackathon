@@ -21,7 +21,11 @@ async function main() {
       participants_name: "John Doe, Sarah Smith",
       recording_start_time: "2024-03-15T09:00:00Z",
       recording_end_time: "2024-03-15T10:00:00Z",
-      recording_summary: "Discussed upcoming sprint goals and task allocation."
+      recording_summary: "Discussed upcoming sprint goals and task allocation.",
+      recording_id: "sduuu-000230_dfsf_",
+      recording_url: "https://8.8.8.8",
+      transcript_encoded: "nothing here",
+      transcript_vtt: "nothing here",
     }
   })
 
