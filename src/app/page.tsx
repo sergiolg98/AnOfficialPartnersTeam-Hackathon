@@ -1,5 +1,5 @@
 import Link from "next/link";
-import ClientList from "~/components/organisms/client-list";
+import ProjectList from "~/components/organisms/project-list";
 
 export default function Page() {
   return (
@@ -7,7 +7,7 @@ export default function Page() {
       {/* Hero Background with Gradient Overlay */}
       <div className="relative overflow-hidden bg-black/5 py-24">
         <div className="bg-grid-white/10 absolute inset-0" />
-        <div className="absolute inset-0 bg-gradient-to-t from-background to-background/0" />
+        <div className="from-background to-background/0 absolute inset-0 bg-gradient-to-t" />
 
         {/* Main Hero Content */}
         <div className="container relative mx-auto px-6">
@@ -18,7 +18,7 @@ export default function Page() {
             <p className="mb-4 bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-3xl font-semibold text-transparent">
               Intelligent Team Member Recommendations
             </p>
-            <p className="text-xl text-muted-foreground">
+            <p className="text-muted-foreground text-xl">
               Where Experience Meets Opportunity
             </p>
           </div>
@@ -29,33 +29,33 @@ export default function Page() {
       <div className="mx-auto -mt-8 max-w-7xl px-6">
         {/* Floating Stats Cards */}
         <div className="mb-12 grid grid-cols-1 gap-6 md:grid-cols-3">
-          <div className="rounded-xl border bg-card p-8 shadow-lg transition-shadow hover:shadow-xl">
+          <div className="bg-card rounded-xl border p-8 shadow-lg transition-shadow hover:shadow-xl">
             <div className="flex flex-col">
-              <p className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
+              <p className="text-muted-foreground text-sm font-medium uppercase tracking-wide">
                 Available Developers
               </p>
               <p className="mt-2 text-3xl font-bold">24</p>
-              <p className="mt-2 text-sm text-muted-foreground">+3 this week</p>
+              <p className="text-muted-foreground mt-2 text-sm">+3 this week</p>
             </div>
           </div>
-          <div className="rounded-xl border bg-card p-8 shadow-lg transition-shadow hover:shadow-xl">
+          <div className="bg-card rounded-xl border p-8 shadow-lg transition-shadow hover:shadow-xl">
             <div className="flex flex-col">
-              <p className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
+              <p className="text-muted-foreground text-sm font-medium uppercase tracking-wide">
                 Active Projects
               </p>
               <p className="mt-2 text-3xl font-bold">12</p>
-              <p className="mt-2 text-sm text-muted-foreground">
+              <p className="text-muted-foreground mt-2 text-sm">
                 5 need matching
               </p>
             </div>
           </div>
-          <div className="rounded-xl border bg-card p-8 shadow-lg transition-shadow hover:shadow-xl">
+          <div className="bg-card rounded-xl border p-8 shadow-lg transition-shadow hover:shadow-xl">
             <div className="flex flex-col">
-              <p className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
+              <p className="text-muted-foreground text-sm font-medium uppercase tracking-wide">
                 Successful Matches
               </p>
               <p className="mt-2 text-3xl font-bold">89%</p>
-              <p className="mt-2 text-sm text-muted-foreground">
+              <p className="text-muted-foreground mt-2 text-sm">
                 +2.5% from last month
               </p>
             </div>
@@ -77,14 +77,14 @@ export default function Page() {
           </div>
 
           {/* Main Content Card */}
-          <div className="rounded-xl border bg-card p-8 shadow-sm">
-            <ClientList />
+          <div className="bg-card rounded-xl border p-8 shadow-sm">
+            <ProjectList />
           </div>
         </div>
 
         {/* Feature Cards */}
         <div className="mb-16 mt-12 grid grid-cols-1 gap-8 md:grid-cols-2">
-          <div className="rounded-xl border bg-card p-8 transition-shadow hover:shadow-lg">
+          <div className="bg-card rounded-xl border p-8 transition-shadow hover:shadow-lg">
             <h3 className="mb-3 text-xl font-semibold">
               Real-time Experience Tracking
             </h3>
@@ -94,7 +94,7 @@ export default function Page() {
               matching.
             </p>
           </div>
-          <div className="rounded-xl border bg-card p-8 transition-shadow hover:shadow-lg">
+          <div className="bg-card rounded-xl border p-8 transition-shadow hover:shadow-lg">
             <h3 className="mb-3 text-xl font-semibold">RAG-powered Matching</h3>
             <p className="text-muted-foreground">
               Advanced retrieval-augmented generation pipeline delivers precise
