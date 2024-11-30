@@ -1,4 +1,5 @@
 "use client";
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
@@ -34,7 +35,8 @@ interface DeveloperCardProps {
   developer: Developer;
 }
 
-export default function Page() {
+// Separate component for the content that needs searchParams
+function PageContent() {
   const [developers] = useState<Developer[]>([
     {
       id: 1,
@@ -77,16 +79,13 @@ export default function Page() {
   const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
   const searchParams = useSearchParams();
   const projectId = searchParams.get("id");
-  console.log("PROJECT ID", projectId);
   const { data } = api.projects.getById.useQuery({ id: Number(projectId) });
-  console.log("data", data);
-  // In your component
+
   const fetchProjectData = async (id: string) => {
     try {
       const project = await getProject(id);
       console.log(project);
     } catch (error) {
-      // Handle any errors
       console.error("Error:", error);
     }
   };
@@ -127,53 +126,62 @@ export default function Page() {
   );
 
   return (
-    <main className="flex min-h-screen bg-background p-8">
-      <div className="mx-auto flex w-full max-w-6xl gap-8">
-        {/* Left Column: Project Form */}
-        <div className="w-1/2">
-          <ProjectForm
-            initialData={{
-              additionalNotes: "",
-              name: data?.name ?? "",
-              positions: [data?.position?.name ?? ""],
-              techStack:
-                data?.techStack.map((tech) => tech.technicalSkill.name) ?? [],
-              projectDescription: data?.projectDescription ?? "",
-            }}
-            onSubmit={function (data: ProjectFormData): void {
-              throw new Error("Function not implemented.");
-            }}
-          />
-        </div>
-
-        {/* Right Column: Developer Suggestions */}
-        <div className="w-1/2">
-          <Card className="h-full">
-            <CardHeader>
-              <CardTitle className="text-xl">Developer Suggestions</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {!showSuggestions ? (
-                <Button
-                  className="w-full"
-                  onClick={async () => {
-                    // await fetchProjectData();
-                    setShowSuggestions(true);
-                  }}
-                >
-                  Find Matching Developers
-                </Button>
-              ) : (
-                <div className="space-y-4">
-                  {developers.map((developer) => (
-                    <DeveloperCard key={developer.id} developer={developer} />
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </div>
+    <div className="mx-auto flex w-full max-w-6xl gap-8">
+      {/* Left Column: Project Form */}
+      <div className="w-1/2">
+        <ProjectForm
+          initialData={{
+            additionalNotes: "",
+            name: data?.name ?? "",
+            positions: [data?.position?.name ?? ""],
+            techStack:
+              data?.techStack.map((tech) => tech.technicalSkill.name) ?? [],
+            projectDescription: data?.projectDescription ?? "",
+          }}
+          onSubmit={function (data: ProjectFormData): void {
+            throw new Error("Function not implemented.");
+          }}
+        />
       </div>
+
+      {/* Right Column: Developer Suggestions */}
+      <div className="w-1/2">
+        <Card className="h-full">
+          <CardHeader>
+            <CardTitle className="text-xl">Developer Suggestions</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {!showSuggestions ? (
+              <Button
+                className="w-full"
+                onClick={async () => {
+                  // await fetchProjectData();
+                  setShowSuggestions(true);
+                }}
+              >
+                Find Matching Developers
+              </Button>
+            ) : (
+              <div className="space-y-4">
+                {developers.map((developer) => (
+                  <DeveloperCard key={developer.id} developer={developer} />
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}
+
+// Main page component with Suspense boundary
+export default function Page() {
+  return (
+    <main className="flex min-h-screen bg-background p-8">
+      <Suspense fallback={<div>Loading...</div>}>
+        <PageContent />
+      </Suspense>
     </main>
   );
 }

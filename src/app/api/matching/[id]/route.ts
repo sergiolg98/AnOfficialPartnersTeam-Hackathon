@@ -38,11 +38,11 @@ const projects: Project[] = [
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Get the project ID from the URL params
-    const id = params.id;
+    const id = (await params).id;
 
     // Find the project in our "database"
     const project = projects.find(p => p.id === id);
