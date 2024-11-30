@@ -34,3 +34,55 @@ model DeveloperExperienceBasedDaily {
     name              String
     short_description String
 }
+
+model Developer {
+  id Int @id @default(autoincrement())
+  seniority       Level
+  languageSkills  Level
+  position        String
+  softSkills      DeveloperSoftSkill[]
+  technicalSkills DeveloperTechnicalSkill[]
+  availability Int
+}
+
+model SoftSkill {
+  id Int @id @default(autoincrement())
+  name String
+  rangeLevel Int
+  developers DeveloperSoftSkill[]
+}
+
+
+model DeveloperSoftSkill {
+  developerId Int
+  softSkillId Int
+  level Int
+  developer Developer @relation(fields: [developerId], references: [id])
+  softSkill SoftSkill @relation(fields: [softSkillId], references: [id])
+
+  @@id([developerId, softSkillId])
+}
+
+
+
+model TechnicalSkill {
+  id Int @id @default(autoincrement())
+  name String
+  developers DeveloperTechnicalSkill[]
+}
+
+model DeveloperTechnicalSkill {
+  developerId Int
+  technicalSkillId Int
+  level Level
+  developer Developer  @relation(fields: [developerId], references: [id])
+  technicalSkill TechnicalSkill @relation(fields: [technicalSkillId], references: [id])
+
+  @@id([developerId, technicalSkillId])
+}
+
+enum Level {
+    BEGINNER
+    INTERMEDIATE
+    ADVANCED
+}
