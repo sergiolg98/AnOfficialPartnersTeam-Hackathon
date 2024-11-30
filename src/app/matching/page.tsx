@@ -10,6 +10,7 @@ import { api } from "~/trpc/react";
 import ProjectForm, {
   ProjectFormData,
 } from "../../components/organisms/project-form";
+import { getSummary } from "~/lib/api-wrapper/getSummary";
 
 interface Skills {
   seniority: number;
@@ -24,6 +25,7 @@ interface Developer {
   id: number;
   name: string;
   skills: Skills;
+  info: string;
 }
 
 interface SkillScoreProps {
@@ -35,46 +37,18 @@ interface DeveloperCardProps {
   developer: Developer;
 }
 
+const skillmockup = {
+  seniority: 0.9,
+  technical: 0.85,
+  soft: 0.95,
+  language: 0.8,
+  communication: 0.9,
+  availability: 0.7,
+};
+
 // Separate component for the content that needs searchParams
 function PageContent() {
-  const [developers] = useState<Developer[]>([
-    {
-      id: 1,
-      name: "Alice Johnson",
-      skills: {
-        seniority: 0.9,
-        technical: 0.85,
-        soft: 0.95,
-        language: 0.8,
-        communication: 0.9,
-        availability: 0.7,
-      },
-    },
-    {
-      id: 2,
-      name: "Bob Smith",
-      skills: {
-        seniority: 0.7,
-        technical: 0.95,
-        soft: 0.8,
-        language: 0.85,
-        communication: 0.75,
-        availability: 0.9,
-      },
-    },
-    {
-      id: 3,
-      name: "Charlie Brown",
-      skills: {
-        seniority: 0.8,
-        technical: 0.8,
-        soft: 0.9,
-        language: 0.9,
-        communication: 0.85,
-        availability: 0.8,
-      },
-    },
-  ]);
+  const [developers, setDevelopers] = useState<Developer[]>([]);
 
   const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
   const searchParams = useSearchParams();
@@ -86,6 +60,15 @@ function PageContent() {
   const fetchProjectData = async (id: string) => {
     try {
       const project = await getProject(id);
+      return project;
+    } catch (error) {
+      return null;
+    }
+  };
+
+  const fetchSummaryPerDev = async (id: string) => {
+    try {
+      const project = await getSummary(id);
       return project;
     } catch (error) {
       return null;
@@ -123,6 +106,7 @@ function PageContent() {
           label="Availability"
           score={developer.skills.availability}
         />
+        <div>{developer.info}</div>
       </CardContent>
     </Card>
   );
@@ -153,25 +137,56 @@ function PageContent() {
             <CardTitle className="text-xl">Developer Suggestions</CardTitle>
           </CardHeader>
           <CardContent>
-            {!showSuggestions ? (
-              <Button
-                className="w-full"
-                onClick={async () => {
-                  const response = await fetchProjectData(projectId ?? "");
-                  setResponse(response);
-                  console.log(response, "con fe");
-                  setShowSuggestions(true);
-                }}
-              >
-                Find Matching Developers
-              </Button>
-            ) : (
-              <div className="space-y-4">
-                {developers.map((developer) => (
-                  <DeveloperCard key={developer.id} developer={developer} />
-                ))}
-              </div>
-            )}
+            <Button
+              className="w-full"
+              onClick={async () => {
+                const response = await fetchProjectData(projectId ?? "");
+
+                // Create a Set to store unique names/emails
+                const uniqueDevs = new Set();
+
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                response.map((dev: any) => {
+                  uniqueDevs.add(dev.name);
+                });
+
+                // Convert Set back to array if needed
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const uniqueDevsArray = Array.from(uniqueDevs) as any[];
+
+                const devresponse = [];
+
+                console.log(uniqueDevsArray, "devvv");
+
+                // Using for...of loop for proper async/await handling
+                for (const dev of uniqueDevsArray) {
+                  console.log(dev, "summary");
+
+                  const summary = await fetchSummaryPerDev(dev as string);
+                  console.log(summary, "summary");
+                  devresponse.push(summary);
+                }
+
+                setDevelopers(
+                  devresponse.map((dev, idx) => {
+                    return {
+                      id: idx,
+                      name: dev.email,
+                      skills: skillmockup,
+                      info: dev.short_descriptions.flat().join(" "),
+                    };
+                  }),
+                );
+              }}
+            >
+              Find Matching Developers
+            </Button>
+
+            <div className="space-y-4">
+              {developers.map((developer) => (
+                <DeveloperCard key={developer.id} developer={developer} />
+              ))}
+            </div>
           </CardContent>
         </Card>
       </div>
