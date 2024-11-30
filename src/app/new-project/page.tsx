@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import PaymentForm from "../../components/organisms/form";
+import PaymentForm from "../../components/organisms/project-form";
 
 export default function Page() {
   const [developers] = useState([
