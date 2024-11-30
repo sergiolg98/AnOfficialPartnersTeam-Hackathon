@@ -1,3 +1,4 @@
+/** Meeting Note Entity */
 export type MeetingNote = {
   title: string,
   transcript_encoded: string,
@@ -11,9 +12,17 @@ export type MeetingNote = {
   recording_url: string,
 };
 
+/** Trascript Entity */
 export type TranscriptEntry = {
   start: number,
   text: string,
   end: number,
   speaker: string,
+}
+
+/** Developer Experience based on Dailys Entity */
+export type DeveloperExperienceDailyEntity = {
+  id?: number,
+  name: string, //@todo change by email beacuse we are currently saving an email
+  short_description: string,
 }
