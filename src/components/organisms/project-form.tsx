@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import { Input } from "../../components/ui/input";
-import { Button } from "../../components/ui/button";
-import { Label } from "../../components/ui/label";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { Label } from "../ui/label";
 import TechStackDropdown from "../molecules/tech-stack-drop-down";
 import SelectedTechBadge from "../molecules/selected-tech-badge";
 import ProjectPositionSelector from "../molecules/position-selector";
 
-const PaymentForm = () => {
+const ProjectForm = () => {
   const [formData, setFormData] = useState({
     name: "",
     projectDescription: "",
@@ -56,7 +56,7 @@ const PaymentForm = () => {
   };
 
   return (
-    <div className="bg-card text-card-foreground mx-auto max-w-lg rounded-lg p-6 shadow-lg">
+    <div className="mx-auto max-w-lg rounded-lg bg-card p-6 text-card-foreground shadow-lg">
       <h2 className="mb-4 text-xl font-bold">
         DevProfile AI: Intelligent Team Member Recommendations
       </h2>
@@ -138,7 +138,7 @@ const PaymentForm = () => {
         </div>
 
         {/* Submit Button */}
-        <Button type="submit" className="bg-foreground text-background w-full">
+        <Button type="submit" className="w-full bg-foreground text-background">
           Continuar
         </Button>
       </form>
@@ -146,4 +146,4 @@ const PaymentForm = () => {
   );
 };
 
-export default PaymentForm;
+export default ProjectForm;

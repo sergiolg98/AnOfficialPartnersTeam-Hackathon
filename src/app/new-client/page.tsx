@@ -1,4 +1,4 @@
-import PaymentForm from "../../components/organisms/form";
+import PaymentForm from "../../components/organisms/project-form";
 
 export default function Page() {
   return (
