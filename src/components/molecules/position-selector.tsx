@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
@@ -12,7 +12,7 @@ import {
 import { Badge } from "~/components/ui/badge";
 import { X } from "lucide-react";
 
-const positions = [
+export const AVAILABLE_POSITIONS = [
   "Cloud DevOps Engineer",
   "React Engineer",
   "Angular Engineer",
@@ -27,36 +27,50 @@ const positions = [
   "Trainee - QA Engineer",
   "Product Owner",
   "Trainee - Product Designer",
-];
+] as const;
 
-const ProjectPositionSelector = () => {
-  const [selectedPositions, setSelectedPositions] = useState<string[]>([]);
+export type Position = (typeof AVAILABLE_POSITIONS)[number];
 
-  const handleSelectPosition = (position: string) => {
-    if (!selectedPositions.includes(position)) {
-      setSelectedPositions([...selectedPositions, position]);
-    }
-  };
+interface ProjectPositionSelectorProps {
+  selectedPositions: string[];
+  onSelectPosition: (position: string) => void;
+  onRemovePosition: (position: string) => void;
+  disabled?: boolean;
+  error?: string;
+}
 
-  const handleRemovePosition = (position: string) => {
-    setSelectedPositions(selectedPositions.filter((item) => item !== position));
-  };
+const ProjectPositionSelector: React.FC<ProjectPositionSelectorProps> = ({
+  selectedPositions,
+  onSelectPosition,
+  onRemovePosition,
+  disabled = false,
+  error,
+}) => {
+  const availablePositions = AVAILABLE_POSITIONS.filter(
+    (position) => !selectedPositions.includes(position),
+  );
 
   return (
-    <div>
+    <div className="space-y-2">
       {/* Dropdown */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="w-full">
-            Seleccionar Posición
+          <Button
+            variant="outline"
+            className="w-full"
+            disabled={disabled || availablePositions.length === 0}
+          >
+            {availablePositions.length === 0
+              ? "No hay más posiciones disponibles"
+              : "Seleccionar Posición"}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
           <DropdownMenuLabel>Posiciones disponibles</DropdownMenuLabel>
-          {positions.map((position) => (
+          {availablePositions.map((position) => (
             <DropdownMenuItem
               key={position}
-              onClick={() => handleSelectPosition(position)}
+              onClick={() => onSelectPosition(position)}
             >
               {position}
             </DropdownMenuItem>
@@ -66,27 +80,30 @@ const ProjectPositionSelector = () => {
 
       {/* Selected Positions */}
       {selectedPositions.length > 0 && (
-        <div className="mt-4">
-          {/* <label className="mb-2 block">Posiciones seleccionadas:</label> */}
+        <div className="mt-2">
           <div className="flex flex-wrap gap-2">
             {selectedPositions.map((position) => (
               <Badge
                 key={position}
-                className="flex items-center space-x-2 rounded-md bg-blue-100 px-3 py-1.5 text-sm text-blue-800"
+                variant="secondary"
+                className="flex items-center gap-2 bg-blue-100 text-blue-800"
               >
-                <span>{position}</span>
+                {position}
                 <button
                   type="button"
-                  onClick={() => handleRemovePosition(position)}
-                  className="ml-1 text-red-500 hover:text-red-700"
+                  onClick={() => onRemovePosition(position)}
+                  className="inline-flex h-4 w-4 items-center justify-center rounded-sm text-blue-800 hover:bg-blue-200 hover:text-blue-900"
+                  disabled={disabled}
                 >
-                  <X className="h-4 w-4" />
+                  <X className="h-3 w-3" />
                 </button>
               </Badge>
             ))}
           </div>
         </div>
       )}
+
+      {error && <p className="mt-1 text-sm text-destructive">{error}</p>}
     </div>
   );
 };

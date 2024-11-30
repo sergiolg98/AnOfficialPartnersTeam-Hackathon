@@ -20,16 +20,20 @@ export default function Page() {
   };
 
   return (
-    <main className="bg-background flex min-h-screen items-center justify-center p-8">
+    <main className="flex min-h-screen items-center justify-center bg-background p-8">
       {/* Wrapper for Form and Developer List */}
       <div className="flex w-full max-w-4xl items-center justify-between gap-8">
         {/* Left Column: Payment Form */}
         <div className="w-1/2">
-          <PaymentForm />
+          <PaymentForm
+            onSubmit={() => {
+              console.log("create");
+            }}
+          />
         </div>
 
         {/* Right Column: Developers List */}
-        <div className="bg-card flex w-1/2 flex-col justify-center rounded-lg border p-6 shadow-lg">
+        <div className="flex w-1/2 flex-col justify-center rounded-lg border bg-card p-6 shadow-lg">
           <h2 className="mb-4 text-center text-xl font-bold text-white">
             Developers disponibles
           </h2>
@@ -49,7 +53,7 @@ export default function Page() {
             ))}
           </ul>
           {selectedDeveloper && (
-            <div className="text-muted-foreground mt-4 text-center text-sm">
+            <div className="mt-4 text-center text-sm text-muted-foreground">
               Seleccionaste:{" "}
               <span className="font-bold">
                 {developers.find((dev) => dev.id === selectedDeveloper)?.name}
