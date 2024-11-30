@@ -2,6 +2,15 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const technicalSkillRouter = createTRPCRouter({
+  getAll: publicProcedure.query(async ({ ctx }) => {
+    const technicalSkills = await ctx.db.technicalSkill.findMany({
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+    return technicalSkills;
+  }),
   getById: publicProcedure
     .input(z.object({ id: z.number() }))
     .query(async ({ ctx, input }) => {
