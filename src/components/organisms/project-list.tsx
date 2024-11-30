@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Badge } from "~/components/ui/badge";
+import { useRouter } from "next/router";
 
 enum ProjectStatus {
   ACTIVE = "ACTIVE",
@@ -60,28 +61,41 @@ const getStatusColor = (status: ProjectStatus): string => {
   }
 };
 
-const ProjectCard: React.FC<{ project: Project }> = ({ project }) => (
-  <Card className="transition-shadow duration-300 hover:shadow-lg">
-    <CardHeader>
-      <div className="flex items-center justify-between">
-        <CardTitle className="text-xl font-bold">{project.name}</CardTitle>
-        <Badge
-          className={`${getStatusColor(project.status)} capitalize text-white`}
-        >
-          {project.status}
-        </Badge>
-      </div>
-      <p className="text-gray-500">{project.client.name}</p>
-      <p className="text-gray-600">{project.description}</p>
-    </CardHeader>
-    <CardFooter className="flex justify-end">
-      <button className="text-sm font-medium text-blue-600 hover:text-blue-800">
-        View Details →
-      </button>
-    </CardFooter>
-  </Card>
-);
+const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
+  const router = useRouter();
 
+  const handleViewDetails = () => {
+    // Redirigir a la página de matching con los datos del proyecto como parámetros en la URL
+    router
+      .push(`/matching?id=${project.id}`)
+      .catch((error) => console.error("Unhandled error:", error));
+  };
+
+  return (
+    <Card className="transition-shadow duration-300 hover:shadow-lg">
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-xl font-bold">{project.name}</CardTitle>
+          <Badge
+            className={`${getStatusColor(project.status)} capitalize text-white`}
+          >
+            {project.status}
+          </Badge>
+        </div>
+        <p className="text-gray-500">{project.client.name}</p>
+        <p className="text-gray-600">{project.description}</p>
+      </CardHeader>
+      <CardFooter className="flex justify-end">
+        <button
+          className="text-sm font-medium text-blue-600 hover:text-blue-800"
+          onClick={handleViewDetails}
+        >
+          View Details →
+        </button>
+      </CardFooter>
+    </Card>
+  );
+};
 const ProjectList: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
