@@ -18,3 +18,13 @@ model Post {
 
     @@index([name])
 }
+
+model MeetingNote {
+    id Int @id @default(autoincrement())
+    title String
+    participants_email String 
+    participants_name String
+    recording_end_time String
+    recording_start_time String
+    recording_summary String
+}
