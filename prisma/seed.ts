@@ -57,6 +57,9 @@ async function main() {
   // Create Developers with their relationships
   const developer1 = await prisma.developer.create({
     data: {
+      email: "george@gmail.com",
+      name: "George",
+      lastname : "Smith",
       seniority: Level.ADVANCED,
       languageSkills: Level.ADVANCED,
       position: "Full Stack Developer",
@@ -90,6 +93,9 @@ async function main() {
 
   const developer2 = await prisma.developer.create({
     data: {
+      email: "andrew@gmail.com",
+      name: "Andrew",
+      lastname : "Johnson",
       seniority: Level.INTERMEDIATE,
       languageSkills: Level.INTERMEDIATE,
       position: "Backend Developer",
