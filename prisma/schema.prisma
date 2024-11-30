@@ -56,7 +56,19 @@ model DeveloperSoftSkill {
 model TechnicalSkill {
   id         Int                       @id @default(autoincrement())
   name       String
-  developers DeveloperTechnicalSkill[]
+  developers DeveloperTechnicalSkill[] // Relación muchos a muchos con Developer
+  projects   ProjectTechnicalSkill[] // Relación muchos a muchos con Project
+}
+
+model ProjectTechnicalSkill {
+  id               Int @id @default(autoincrement())
+  projectId        Int
+  technicalSkillId Int
+
+  project        Project        @relation(fields: [projectId], references: [id])
+  technicalSkill TechnicalSkill @relation(fields: [technicalSkillId], references: [id])
+
+  @@unique([projectId, technicalSkillId]) // Evita duplicados en la relación
 }
 
 model DeveloperTechnicalSkill {
@@ -73,4 +85,27 @@ enum Level {
   BEGINNER
   INTERMEDIATE
   ADVANCED
+}
+
+model Client {
+  id       Int       @id @default(autoincrement())
+  name     String
+  projects Project[]
+}
+
+model Project {
+  id                 Int                     @id @default(autoincrement())
+  name               String
+  projectDescription String
+  techStack          ProjectTechnicalSkill[] // Relación muchos a muchos con TechnicalSkill
+  position           Position?               @relation(fields: [positionId], references: [id])
+  positionId         Int?
+  client             Client?                 @relation(fields: [clientId], references: [id])
+  clientId           Int?
+}
+
+model Position {
+  id      Int       @id @default(autoincrement())
+  name    String
+  Project Project[]
 }
