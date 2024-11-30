@@ -4,19 +4,18 @@ import React, { useState } from "react";
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
 import { Label } from "../../components/ui/label";
-import TechStackSelector from "../_components/techSelector";
+import TechStackDropdown from "../molecules/tech-stack-drop-down";
+import SelectedTechBadge from "../molecules/selected-tech-badge";
+import ProjectPositionSelector from "../molecules/position-selector";
 
 const PaymentForm = () => {
   const [formData, setFormData] = useState({
     name: "",
-    city: "",
-    cardNumber: "",
-    month: "",
-    year: "",
-    cvc: "",
+    projectDescription: "",
     aditionalNotes: "",
   });
   const [selectedTech, setSelectedTech] = useState<string[]>([]);
+  const [selectedPositions, setSelectedPositions] = useState<string[]>([]);
 
   const techStack = [
     "React",
@@ -30,7 +29,6 @@ const PaymentForm = () => {
     "GraphQL",
     "Kubernetes",
   ];
-  const levels = ["Principiante", "Intermedio", "Avanzado"];
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -41,9 +39,20 @@ const PaymentForm = () => {
     });
   };
 
+  const handleTechSelect = (tech: string) => {
+    setSelectedTech([...selectedTech, tech]);
+  };
+
+  const handleRemoveTech = (tech: string) => {
+    setSelectedTech(selectedTech.filter((item) => item !== tech));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form Submitted:", formData);
+    console.log("Form Submitted:", {
+      ...formData,
+      techStack: selectedTech,
+    });
   };
 
   return (
@@ -51,12 +60,13 @@ const PaymentForm = () => {
       <h2 className="mb-4 text-xl font-bold">
         DevProfile AI: Intelligent Team Member Recommendations
       </h2>
-      <p className="text-muted-foreground mb-6 text-sm">Ed</p>
 
       <form className="space-y-4" onSubmit={handleSubmit}>
         {/* Name Field */}
         <div>
-          <Label htmlFor="name">Nombre completo</Label>
+          <Label htmlFor="name" className="mb-2 block">
+            Nombre completo
+          </Label>
           <Input
             type="text"
             name="name"
@@ -69,30 +79,53 @@ const PaymentForm = () => {
           />
         </div>
 
-        {/* Project field */}
+        {/* Project Field */}
         <div>
-          <Label htmlFor="city">Descripcion del proyecto</Label>
+          <Label htmlFor="projectDescription" className="mb-2 block">
+            Descripción del proyecto
+          </Label>
           <Input
             type="text"
-            name="city"
-            id="city"
-            value={formData.city}
+            name="projectDescription"
+            id="projectDescription"
+            value={formData.projectDescription}
             onChange={handleChange}
             placeholder="Tu proyecto"
             required
           />
         </div>
 
-        {/* Tech Stack*/}
-
-        <TechStackSelector
-          techStack={techStack}
-          selectedTech={selectedTech}
-          onChange={setSelectedTech}
+        {/* Tech Stack Dropdown */}
+        <TechStackDropdown
+          techStack={techStack.filter((tech) => !selectedTech.includes(tech))}
+          onSelect={handleTechSelect}
         />
-        {/* Aditional notes */}
+
+        {/* Selected Tech Stack */}
+        {selectedTech.length > 0 && (
+          <div>
+            {/* <Label className="mb-2 mt-4 block">
+              Tecnologías seleccionadas:
+            </Label> */}
+            <div className="mt-2 flex flex-wrap gap-3">
+              {selectedTech.map((tech) => (
+                <SelectedTechBadge
+                  key={tech}
+                  tech={tech}
+                  onRemove={handleRemoveTech}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        <ProjectPositionSelector />
+
+        {/* Additional Notes */}
         <div>
-          <Label htmlFor="city">Notas adicionales</Label>
+          <Label htmlFor="aditionalNotes" className="mb-2 block">
+            Notas adicionales
+          </Label>
           <Input
             type="text"
             name="aditionalNotes"
@@ -106,7 +139,7 @@ const PaymentForm = () => {
 
         {/* Submit Button */}
         <Button type="submit" className="bg-foreground text-background w-full">
-          Continue
+          Continuar
         </Button>
       </form>
     </div>
