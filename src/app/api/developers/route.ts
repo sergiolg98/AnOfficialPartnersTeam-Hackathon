@@ -13,5 +13,33 @@ export async function POST(request: Request) {
       recording_summary: meeting.recording_summary,
     }
   });
+  await processSummary(meeting.recording_summary, meeting.participants_name);
   return Response.json(response);
+}
+
+
+async function processSummary(summary: string, participants: string): Promise<void> {
+  const participantNames = participants.split(',').map(name => name.trim());
+
+  for (const name of participantNames) {
+    const regex = new RegExp(`${name.replace(/ /g, '\\s*')}.*?(\\.|$)`, 'gi');
+    const match = summary.match(regex);
+
+    if (!match) {
+      await db.developerExperienceBasedDaily.create({
+        data: {
+          name: name,
+          short_description: 'No statement found in the summary.',
+        },
+      });
+    } else {
+      const statement = match[0].replace(new RegExp(`^${name.replace(/ /g, '\\s*')}\\s*`, 'i'), '').trim();
+      await db.developerExperienceBasedDaily.create({
+        data: {
+          name: name,
+          short_description: statement,
+        },
+      });
+    }
+  }
 }

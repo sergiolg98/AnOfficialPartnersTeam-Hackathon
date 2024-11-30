@@ -20,11 +20,17 @@ model Post {
 }
 
 model MeetingNote {
-    id Int @id @default(autoincrement())
-    title String
-    participants_email String 
-    participants_name String
-    recording_end_time String
+    id                   Int    @id @default(autoincrement())
+    title                String
+    participants_email   String
+    participants_name    String
+    recording_end_time   String
     recording_start_time String
-    recording_summary String
+    recording_summary    String
+}
+
+model DeveloperExperienceBasedDaily {
+    id                Int    @id @default(autoincrement())
+    name              String
+    short_description String
 }
