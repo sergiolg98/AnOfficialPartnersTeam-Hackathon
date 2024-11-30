@@ -28,6 +28,9 @@ model DeveloperExperienceBasedDaily {
 
 model Developer {
   id              Int                       @id @default(autoincrement())
+  email           String                    @unique
+  name            String
+  lastname        String
   seniority       Level
   languageSkills  Level
   position        String
